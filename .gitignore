@@ -1,2 +1,4 @@
 lua-5.5.0/
 build/
+release/
+lua_script.h

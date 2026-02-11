@@ -8,15 +8,6 @@
 
 #include <stdint.h>
 
-static int lua_gpio_init(lua_State * L)
-{
-	uint8_t pin = luaL_checkinteger(L, 1);
-	printf("lua_gpio_init called with pin %d\n", pin);
-	hal_gpio_init(pin);
-	printf("hal_gpio_init completed\n");
-	return 0;
-}
-
 static int lua_gpio_set_output (lua_State * L)
 {
 	printf("lua_gpio_set_output called!\n");
@@ -27,7 +18,21 @@ static int lua_gpio_set_output (lua_State * L)
 	return 0;
 }
 
+static int lua_gpio_set_input (lua_State * L)
+{
+	uint8_t pin = luaL_checkinteger(L, 1);
+	hal_gpio_set_input(pin);
 
+	return 0;
+}
+
+static int lua_gpio_get_input (lua_State * L)
+{
+	uint8_t pin = luaL_checkinteger(L, 1);
+	int value = hal_gpio_get_input(pin);
+	lua_pushinteger(L, value);
+	return 1;
+}
 
 void lua_open_gpio_library (lua_State * L)
 {
@@ -38,8 +43,11 @@ void lua_open_gpio_library (lua_State * L)
 	lua_pushcfunction(L, lua_gpio_set_output);
 	lua_setfield(L, -2, "set_output");
 
-	lua_pushcfunction(L, lua_gpio_init);
-	lua_setfield(L, -2, "init");
+	lua_pushcfunction(L, lua_gpio_set_input);
+	lua_setfield(L, -2, "set_input");
+
+	lua_pushcfunction(L, lua_gpio_get_input);
+	lua_setfield(L, -2, "get_input");
 
 	lua_setfield(L, -2, "gpio");
 
