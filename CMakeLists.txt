@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 
 set(PICO_BOARD pico_w)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
 
 include(cmake/pico_sdk_import.cmake)
 

@@ -1,12 +1,14 @@
-#include "lua-5.5.0/lua.h"
-#include "lua-5.5.0/lauxlib.h"
-#include "lua-5.5.0/lualib.h"
+#include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
 #include "lua_libraries.h"
 #include "lua_script.h"
 #include "hal.h"
 #include "pico/stdlib.h"
+#include "pico/multicore.h"
 
-int main () {
+int main () 
+{
     stdio_init_all();
 
     lua_State * L = init_lua();
@@ -24,4 +26,3 @@ int main () {
     lua_close(L);
     return 0;
 }
-

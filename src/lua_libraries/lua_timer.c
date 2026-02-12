@@ -6,8 +6,15 @@
 
 static int lua_delay(lua_State * L)
 {
-    int ms = luaL_checkinteger(L, 1);
+    lua_Integer input = luaL_checkinteger(L, 1);
     
+	if (input < 0 || input > UINT32_MAX)
+	{
+		luaL_error(L, "Invalid input");
+	}
+
+	uint32_t ms = (uint32_t)input;
+
     hal_timer_delay_ms(ms);
 
     return 0;
