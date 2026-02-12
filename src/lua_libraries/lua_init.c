@@ -15,6 +15,7 @@ lua_State * init_lua (void)
 
 	lua_open_gpio_library(L);
 	lua_open_timer_library(L);
+	lua_open_uart_library(L);
 
 	return L;
 }
