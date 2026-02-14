@@ -1,0 +1,9 @@
+project = "Pico Lua Wrapper"
+title = "Pico Lua Wrapper - API Documentation"
+description = "Lua bindings for Raspberry Pi Pico hardware control"
+version = "1.0"
+file = "api_doc/"
+output = "docs"
+style = "!fixed"
+pretty = true
+format = "markdown"
