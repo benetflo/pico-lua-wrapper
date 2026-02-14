@@ -18,6 +18,7 @@ int hal_gpio_set_pulls (uint8_t pin, const char * pupd);
 
 // UART
 int hal_uart_init(uint8_t tx, uint8_t rx, uint16_t baudrate, const char * uart_num);
+int hal_uart_write_string (const char * uart_num, const char * data);
 
 // TIMER
 void hal_timer_delay_ms(int ms);
