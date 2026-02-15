@@ -9,26 +9,39 @@
 #include "pico/stdlib.h"
 
 
-static int lua_gpio_set_output (lua_State * L)
+static int lua_gpio_init (lua_State * L)
 {
 	uint8_t pin = luaL_checkinteger(L, 1);
-	const char * input = luaL_checkstring(L, 2);
-	uint8_t value;
+	uint8_t dir = luaL_checkinteger(L, 2);
 
 	if (!gpio_is_valid(pin))
 	{
 		luaL_error(L, "Invalid pin!");
 	}
 
-	if (strcmp(input, "HIGH") == 0)
+	if (dir != GPIO_OUT &&
+		dir != GPIO_IN)
 	{
-		value = GPIO_HIGH;
+		luaL_error(L, "Invalid GPIO direction");
 	}
-	else if (strcmp(input, "LOW") == 0)
+
+	safe_gpio_init(pin, dir);
+	
+	return 0;
+}
+
+static int lua_gpio_set_output (lua_State * L)
+{
+	uint8_t pin = luaL_checkinteger(L, 1);
+	uint8_t value = luaL_checkinteger(L, 2);
+
+	if (!gpio_is_valid(pin))
 	{
-		value = GPIO_LOW;
+		luaL_error(L, "Invalid pin!");
 	}
-	else
+
+	if (value != HAL_GPIO_HIGH &&
+		value != HAL_GPIO_LOW)
 	{
 		luaL_error(L, "Invalid value!");
 	}
@@ -51,6 +64,20 @@ static int lua_gpio_set_input (lua_State * L)
 	return 0;
 }
 
+static int lua_gpio_toggle (lua_State * L)
+{
+	uint8_t pin = luaL_checkinteger(L, 1);
+
+	if (!gpio_is_valid(pin))
+	{
+		luaL_error(L, "Invalid pin!");
+	}
+
+	hal_gpio_toggle(pin);
+
+	return 0;
+}
+
 static int lua_gpio_get_input (lua_State * L)
 {
 	uint8_t pin = luaL_checkinteger(L, 1);
@@ -69,14 +96,16 @@ static int lua_gpio_get_input (lua_State * L)
 static int lua_gpio_set_pulls (lua_State * L)
 {
 	uint8_t pin = luaL_checkinteger(L, 1);
-	const char * pupd = luaL_checkstring(L, 2);
+	uint8_t pupd = luaL_checkinteger(L, 2);
 	
 	if (!gpio_is_valid(pin))
 	{
 		luaL_error(L, "Invalid pin!");
 	}
 
-	if (!(strcmp(pupd, "UP") == 0 || strcmp(pupd, "DOWN") == 0))
+	if (pupd != HAL_GPIO_PULL_UP  && 
+		pupd != HAL_GPIO_PULL_DOWN &&
+		pupd != HAL_GPIO_PULL_NONE)
 	{
 		luaL_error(L, "Invalid pull up and pull down config!");
 	}
@@ -92,11 +121,40 @@ void lua_open_gpio_library (lua_State * L)
 
 	lua_newtable(L);
 
+	lua_pushinteger(L, GPIO_OUT);
+	lua_setfield(L, -2, "OUT");
+
+	lua_pushinteger(L, GPIO_IN);
+	lua_setfield(L, -2, "IN");
+
+    // Output levels
+    lua_pushinteger(L, HAL_GPIO_HIGH);
+    lua_setfield(L, -2, "HIGH");
+
+    lua_pushinteger(L, HAL_GPIO_LOW);
+    lua_setfield(L, -2, "LOW");
+
+    // Pull types
+    lua_pushinteger(L, HAL_GPIO_PULL_UP);
+    lua_setfield(L, -2, "UP");
+
+    lua_pushinteger(L, HAL_GPIO_PULL_DOWN);
+    lua_setfield(L, -2, "DOWN");
+
+	lua_pushinteger(L, HAL_GPIO_PULL_NONE);
+    lua_setfield(L, -2, "NONE");
+
+	lua_pushcfunction(L, lua_gpio_init);
+	lua_setfield(L, -2, "init");
+
 	lua_pushcfunction(L, lua_gpio_set_output);
 	lua_setfield(L, -2, "set_output");
 
 	lua_pushcfunction(L, lua_gpio_set_input);
 	lua_setfield(L, -2, "set_input");
+
+	lua_pushcfunction(L, lua_gpio_toggle);
+	lua_setfield(L, -2, "toggle");
 
 	lua_pushcfunction(L, lua_gpio_get_input);
 	lua_setfield(L, -2, "get_input");
