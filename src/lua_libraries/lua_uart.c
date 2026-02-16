@@ -8,16 +8,52 @@
 
 static int lua_uart_init (lua_State * L)
 {
-    hal_uart_init(0, 1, 9600, "uart0");
+    uint8_t tx_pin = luaL_checkinteger(L, 1);
+    uint8_t rx_pin = luaL_checkinteger(L, 2);
+    uint16_t baudrate = luaL_checkinteger(L, 3);
+    uint8_t uartx = luaL_checkinteger(L, 4);
+    
+    int result = hal_uart_init(tx_pin, rx_pin, baudrate, uartx);
+    
+    if (result == UART_ERR_INVALID_PINS) 
+    {
+        luaL_error(L, "Invalid TX and or RX pins");
+    }
+    else if (result == UART_ERR_INST_IN_USE) 
+    {
+        luaL_error(L, "Instance already in use");
+    }
+    
     return 0;
 }
 
 static int lua_uart_write_string (lua_State * L)
 {
-    const char * uartx = luaL_checkstring(L, 1);
-    const char * data = luaL_checkstring(L, 2);
+    uint8_t uartx = luaL_checkinteger(L, 1);
 
-    hal_uart_write_string(uartx, data);
+    if (uartx != HAL_UART_UART0 &&
+        uartx != HAL_UART_UART1)
+    {
+        luaL_error(L, "Invalid UART instance");
+    }
+
+    const char * data = luaL_checkstring(L, 2); // TODO: might need to null terminate here
+
+    int result = hal_uart_write_string(uartx, data);
+
+    if (result == UART_ERR_INVALID_INST)
+    {
+        luaL_error(L, "Invalid UART instance");
+    }
+    else if (result == UART_ERR_INST_IN_USE)
+    {
+        luaL_error(L, "UART not initialized");
+    }
+    else if (result == UART_ERR_NOT_WRITABLE)
+    {
+        luaL_error(L, "UART not writable");
+    }
+
     
     return 0;
 }
@@ -34,7 +70,7 @@ static int lua_uart_write_string (lua_State * L)
  * 
  * @return 0 on sucess, negative value on error.    
  */
-static int lua_uart_set_config (lua_State * L) // TODO: FIX THIS CLEANLY
+static int lua_uart_set_config (lua_State * L)
 {
     uint8_t uartx = luaL_checkinteger(L, 1);
     if (uartx != HAL_UART_UART0 &&
@@ -67,7 +103,16 @@ static int lua_uart_set_config (lua_State * L) // TODO: FIX THIS CLEANLY
     bool cts = lua_toboolean(L, 5);
     bool rts = lua_toboolean(L, 6);
     
-    hal_uart_set_config(uartx, data_bits, stop_bits, parity, cts, rts);
+    int result = hal_uart_set_config(uartx, data_bits, stop_bits, parity, cts, rts);
+
+    if (result == UART_ERR_INVALID_INST)
+    {
+        luaL_error(L, "Invalid UART instance");
+    }
+    else if (result == UART_ERR_INST_IN_USE)
+    {
+        luaL_error(L, "UART not initialized");
+    }
 
     return 0;
 }
