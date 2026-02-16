@@ -7,7 +7,7 @@
 -- @param uartx UART instance number (UART0, UART1)
 -- @param string message to send
 -- @usage
--- hardware.uart.write_string("UART0", "Hello World!")
+-- hardware.uart.write_string(hardware.uart.UART0, "Hello World")
 function hardware.uart.write_string(uartx, string)
 end
 
@@ -19,6 +19,6 @@ end
 --@param cts Enable CTS flow control
 --@param rts Enable RTS flow control
 --@usage
---hardware.uart.set_config("UART0", 8, 1, "NONE", false, false)
+--hardware.uart.set_config(hardware.uart.UART0, 8, 1, hardware.uart.NONE, false, false)
 function hardware.uart.set_config(uartx, data_bits, stop_bits, parity, cts, rts)
 end

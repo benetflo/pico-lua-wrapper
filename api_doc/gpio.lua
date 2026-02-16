@@ -13,7 +13,7 @@ end
 -- @param pin GPIO pin number (0-22, 26-28)
 -- @param state "HIGH" or "LOW"
 -- @usage
--- hardware.gpio.set_output(16, "HIGH")
+-- hardware.gpio.set_output(16, hardware.gpio.HIGH)
 function set_output(pin, state)
 end
 
@@ -36,6 +36,6 @@ end
 -- @param pin GPIO pin number (0-22, 26-28)
 -- @param pupd "UP", "DOWN" or "NONE"
 -- @usage
--- hardware.gpio.set_pulls(16, "UP")
+-- hardware.gpio.set_pulls(15, hardware.gpio.UP))
 function set_pulls(pin, pupd)
 end

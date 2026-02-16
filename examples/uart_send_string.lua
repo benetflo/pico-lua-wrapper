@@ -3,6 +3,6 @@ hardware.uart.set_config(hardware.uart.UART0, 8, 1, hardware.uart.NONE, false, f
 
 while true do
     hardware.timer.delay_ms(5000)
-    hardware.uart.write_string(hardware.uart.UART0, "Hello Simon")
+    hardware.uart.write_string(hardware.uart.UART0, "Hello World")
     hardware.timer.delay_ms(2000)
 end
