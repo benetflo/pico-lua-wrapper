@@ -7,6 +7,14 @@
 -- GPIO control functions from C library
 -- @section gpio
 
+--- Initializes GPIO pin.
+-- Binding to: lua_gpio_init (C function)
+-- @param pin GPIO pin number (0-22, 26-28)
+-- @usage
+-- hardware.gpio.init(16)
+function hardware.gpio.init(pin)
+end
+
 --- Reads value from given GPIO pin
 -- Binding to: lua_gpio_get_input (C function)
 -- @param pin GPIO pin number (0-22, 26-28)
@@ -38,7 +46,7 @@ end
 --- Set pull-up or pull-down resistor
 -- Binding to: lua_gpio_set_pulls (C function)
 -- @param pin GPIO pin number (0-22, 26-28)
--- @param pupd "UP" or "DOWN"
+-- @param pupd "UP", "DOWN" or "NONE"
 -- @usage
 -- hardware.gpio.set_pulls(15, "UP")
 function hardware.gpio.set_pulls(pin, pupd)

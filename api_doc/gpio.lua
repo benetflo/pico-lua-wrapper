@@ -2,6 +2,26 @@
 -- Hardware GPIO control functions from C library
 -- @module hardware.gpio
 
+-- Initializes GPIO pin.
+-- @param pin GPIO pin number (0-22, 26-28)
+-- @usage
+-- hardware.gpio.init(16)
+function init(pin)
+end
+
+--- Sets GPIO pin to HIGH or LOW. Init is done automatically.
+-- @param pin GPIO pin number (0-22, 26-28)
+-- @param state "HIGH" or "LOW"
+-- @usage
+-- hardware.gpio.set_output(16, "HIGH")
+function set_output(pin, state)
+end
+
+--- Configure GPIO pin as input with pull down as default. Init is done automatically.
+-- @param pin GPIO pin number (0-22, 26-28) 
+function set_input(pin)
+end
+
 --- Reads value from given GPIO pin
 -- @param pin GPIO pin number (0-22, 26-28)
 -- @return 0 if LOW, 1 if HIGH
@@ -12,21 +32,10 @@
 function get_input(pin)
 end
 
---- Sets GPIO pin to HIGH or LOW
--- @param pin GPIO pin number (0-22, 26-28)
--- @param state "HIGH" or "LOW"
--- @usage
--- hardware.gpio.set_output(16, "HIGH")
-function set_output(pin, state)
-end
-
---- Configure GPIO pin as input
--- @param pin GPIO pin number (0-22, 26-28)
-function set_input(pin)
-end
-
 --- Set pull-up or pull-down resistor
 -- @param pin GPIO pin number (0-22, 26-28)
--- @param pupd "UP" or "DOWN"
+-- @param pupd "UP", "DOWN" or "NONE"
+-- @usage
+-- hardware.gpio.set_pulls(16, "UP")
 function set_pulls(pin, pupd)
 end

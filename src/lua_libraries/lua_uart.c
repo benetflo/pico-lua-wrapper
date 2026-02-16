@@ -36,9 +36,9 @@ static int lua_uart_write_string (lua_State * L)
  */
 static int lua_uart_set_config (lua_State * L) // TODO: FIX THIS CLEANLY
 {
-    const char * uartx = luaL_checkstring(L, 1);
-    if (strcmp(uartx, "uart0") != 0 &&
-        strcmp(uartx, "uart1") != 0)
+    uint8_t uartx = luaL_checkinteger(L, 1);
+    if (uartx != HAL_UART_UART0 &&
+        uartx != HAL_UART_UART1)
     {
         luaL_error(L, "Invalid UART instance");
     }
@@ -56,10 +56,10 @@ static int lua_uart_set_config (lua_State * L) // TODO: FIX THIS CLEANLY
         luaL_error(L, "Invalid amount of stop bits chosen");
     }
     
-    const char * parity = luaL_checkstring(L, 4);
-    if (strcmp(parity, "NONE") != 0 &&
-        strcmp(parity, "EVEN") != 0 &&
-        strcmp(parity, "ODD") != 0)
+    uint8_t parity = luaL_checkinteger(L, 4);
+    if (parity != HAL_UART_NONE &&
+        parity != HAL_UART_EVEN &&
+        parity != HAL_UART_ODD)
     {
         luaL_error(L, "Invalid parity");
     }
@@ -77,6 +77,21 @@ void lua_open_uart_library (lua_State * L)
 	lua_getglobal(L, "hardware");
 
 	lua_newtable(L);
+
+    lua_pushinteger(L, HAL_UART_NONE);
+    lua_setfield(L, -2, "NONE");
+
+    lua_pushinteger(L, HAL_UART_EVEN);
+    lua_setfield(L, -2, "EVEN");
+
+    lua_pushinteger(L, HAL_UART_ODD);
+    lua_setfield(L, -2, "ODD");
+
+    lua_pushinteger(L, HAL_UART_UART0);
+    lua_setfield(L, -2, "UART0");
+
+    lua_pushinteger(L, HAL_UART_UART1);
+    lua_setfield(L, -2, "UART1");
 
 	lua_pushcfunction(L, lua_uart_init);
 	lua_setfield(L, -2, "init");

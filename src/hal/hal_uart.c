@@ -139,31 +139,29 @@ int hal_uart_init(uint8_t tx, uint8_t rx, uint16_t baudrate, const char * uart_n
     return 0;
 }
 
-int hal_uart_set_config (const char * uart_num, uint8_t data_bits, uint8_t stop_bits, const char * parity, bool cts, bool rts) // TODO: FIX THIS CLEANLY
+int hal_uart_set_config (uint8_t uart_num, uint8_t data_bits, uint8_t stop_bits, uint8_t parity, bool cts, bool rts) // TODO: FIX THIS CLEANLY
 {
-    uart_parity_t real_parity; // UART_PARITY_NONE, UART_PARITY_EVEN, UART_PARITY_ODD
-
-    if (strcmp(parity, "NONE") == 0)
+    if (parity == HAL_UART_NONE)
     {
-        real_parity = UART_PARITY_NONE;
+        parity = UART_PARITY_NONE;
     }
-    else if (strcmp(parity, "EVEN") == 0)
+    else if (parity == HAL_UART_EVEN)
     {
-        real_parity = UART_PARITY_EVEN;
+        parity = UART_PARITY_EVEN;
     }
     else
     {
-        real_parity = UART_PARITY_ODD;
+        parity = UART_PARITY_ODD;
     }
 
-    if (strcmp(uart_num, "uart0") == 0)
+    if (uart_num == HAL_UART_UART0)
     {
-        uart_set_format(uart0_instance.uart_num, data_bits, stop_bits, real_parity);
+        uart_set_format(uart0_instance.uart_num, data_bits, stop_bits, parity);
         uart_set_hw_flow(uart0_instance.uart_num, cts, rts);
         return 0;
     }
 
-    uart_set_format(uart1_instance.uart_num, data_bits, stop_bits, real_parity);
+    uart_set_format(uart1_instance.uart_num, data_bits, stop_bits, parity);
     uart_set_hw_flow(uart1_instance.uart_num, cts, rts);
     return 0;
 }
