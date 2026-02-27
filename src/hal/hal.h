@@ -55,6 +55,7 @@ typedef enum
 hal_uart_err_t hal_uart_init(uint8_t tx, uint8_t rx, uint16_t baudrate, uint8_t uart_num);
 int hal_uart_set_config (uint8_t uart_num, uint8_t data_bits, uint8_t stop_bits, uint16_t parity, bool cts, bool rts);
 hal_uart_err_t hal_uart_write_string (uint8_t uart_num, const char * data);
+hal_uart_err_t hal_uart_write_byte (uint8_t uart_num, const char c);
 
 
 // TIMER

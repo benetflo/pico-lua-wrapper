@@ -163,7 +163,8 @@ int hal_uart_set_config(uint8_t uart_num, uint8_t data_bits, uint8_t stop_bits, 
     return UART_ERR_SUCCESS;
 }
 
-hal_uart_err_t hal_uart_write_string(uint8_t uart_num, const char * data) {
+hal_uart_err_t hal_uart_write_string (uint8_t uart_num, const char * data) 
+{
     
     uart_instance_t * inst;
 
@@ -190,6 +191,38 @@ hal_uart_err_t hal_uart_write_string(uint8_t uart_num, const char * data) {
     }
 
     uart_puts(inst->uart_num, data);
+
+    return UART_ERR_SUCCESS;
+}
+
+hal_uart_err_t hal_uart_write_byte (uint8_t uart_num, const char c)
+{
+    uart_instance_t * inst;
+
+    if (uart_num == HAL_UART_UART0)
+    {
+        inst = &uart0_instance;
+    }
+    else if (uart_num == HAL_UART_UART1) 
+    {
+        inst = &uart1_instance;
+    }
+    else
+    {
+        return UART_ERR_INVALID_INST;
+    }
+
+    if (!inst->in_use)
+    {
+        return UART_ERR_INST_IN_USE;
+    } 
+
+    if (!uart_is_writable(inst->uart_num)) 
+    {
+        return UART_ERR_NOT_WRITABLE;
+    }
+
+    uart_putc_raw(inst->uart_num, c);
 
     return UART_ERR_SUCCESS;
 }

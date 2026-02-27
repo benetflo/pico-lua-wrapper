@@ -58,6 +58,41 @@ static int lua_uart_write_string (lua_State * L)
     return 0;
 }
 
+static int lua_uart_write_byte (lua_State * L)
+{
+    uint8_t uartx = luaL_checkinteger(L, 1);
+
+    if (uartx != HAL_UART_UART0 &&
+        uartx != HAL_UART_UART1)
+    {
+        luaL_error(L, "Invalid UART instance");
+    }
+
+    lua_Integer li = luaL_checkinteger(L, 2);
+    if (li < 0 || li > 255)
+    {
+        luaL_error(L, "Byte out of range");
+    }
+    char c = (char)li;
+
+    int result = hal_uart_write_byte(uartx, c);
+
+    if (result == UART_ERR_INVALID_INST)
+    {
+        luaL_error(L, "Invalid UART instance");
+    }
+    else if (result == UART_ERR_INST_IN_USE)
+    {
+        luaL_error(L, "UART not initialized");
+    }
+    else if (result == UART_ERR_NOT_WRITABLE)
+    {
+        luaL_error(L, "UART not writable");
+    }
+
+    return 0;
+}
+
 /**
  * @brief Configure UART peripheral
  * 
@@ -143,6 +178,9 @@ void lua_open_uart_library (lua_State * L)
 
     lua_pushcfunction(L, lua_uart_write_string);
 	lua_setfield(L, -2, "write_string");
+
+    lua_pushcfunction(L, lua_uart_write_byte);
+	lua_setfield(L, -2, "write_byte");
 
     lua_pushcfunction(L, lua_uart_set_config);
 	lua_setfield(L, -2, "set_config");
