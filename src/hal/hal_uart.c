@@ -226,3 +226,35 @@ hal_uart_err_t hal_uart_write_byte (uint8_t uart_num, const char c)
 
     return UART_ERR_SUCCESS;
 }
+
+hal_uart_err_t hal_uart_read_byte (uint8_t uart_num, char * out_byte)
+{
+    uart_instance_t * inst;
+
+    if (uart_num == HAL_UART_UART0)
+    {
+        inst = &uart0_instance;
+    }
+    else if (uart_num == HAL_UART_UART1) 
+    {
+        inst = &uart1_instance;
+    }
+    else
+    {
+        return UART_ERR_INVALID_INST;
+    }
+
+    if (!inst->in_use)
+    {
+        return UART_ERR_INST_IN_USE;
+    } 
+
+    while (!uart_is_readable(inst->uart_num)) 
+    {
+        sleep_ms(1);
+    }
+
+    *out_byte = uart_getc(inst->uart_num);
+
+    return UART_ERR_SUCCESS;
+}

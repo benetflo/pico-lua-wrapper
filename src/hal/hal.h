@@ -48,14 +48,16 @@ typedef enum
     UART_ERR_INVALID_PINS = -1,
     UART_ERR_INST_IN_USE = -2,
     UART_ERR_NOT_WRITABLE = -3,
-    UART_ERR_INVALID_INST = -4,
+    UART_ERR_NOT_READABLE = -4,
+    UART_ERR_INVALID_INST = -5,
     UART_ERR_SUCCESS = 0
 } hal_uart_err_t;
 
 hal_uart_err_t hal_uart_init(uint8_t tx, uint8_t rx, uint16_t baudrate, uint8_t uart_num);
-int hal_uart_set_config (uint8_t uart_num, uint8_t data_bits, uint8_t stop_bits, uint16_t parity, bool cts, bool rts);
-hal_uart_err_t hal_uart_write_string (uint8_t uart_num, const char * data);
-hal_uart_err_t hal_uart_write_byte (uint8_t uart_num, const char c);
+int hal_uart_set_config(uint8_t uart_num, uint8_t data_bits, uint8_t stop_bits, uint16_t parity, bool cts, bool rts);
+hal_uart_err_t hal_uart_write_string(uint8_t uart_num, const char * data);
+hal_uart_err_t hal_uart_write_byte(uint8_t uart_num, const char c);
+hal_uart_err_t hal_uart_read_byte(uint8_t uart_num, char * out_byte);
 
 
 // TIMER

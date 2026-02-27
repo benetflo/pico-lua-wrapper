@@ -19,6 +19,13 @@ end
 function hardware.uart.write_byte(uartx, byte)
 end
 
+--- Reads a byte from selected UART instance
+-- @param uartx UART instance number (UART0, UART1)
+-- @usage
+-- hardware.uart.read_byte(hardware.uart.UART0)
+function hardware.uart.read_byte(uartx)
+end
+
 --- Configures the UART peripheral
 -- @param uartx UART instance number (UART0, UART1)
 -- @param data_bits Number of data bits (5-8)

@@ -66,11 +66,20 @@ function hardware.uart.write_string(uartx, string)
 end
 
 --- Sends a byte from selected UART instance
+-- Binding to: lua_uart_write_byte (C function)
 -- @param uartx UART instance number (UART0, UART1)
 -- @param byte to send
 -- @usage
 -- hardware.uart.write_byte(hardware.uart.UART0, 0x40)
 function hardware.uart.write_byte(uartx, byte)
+end
+
+--- Reads a byte from selected UART instance
+-- Binding to: lua_uart_read_byte (C function)
+-- @param uartx UART instance number (UART0, UART1)
+-- @usage
+-- hardware.uart.read_byte(hardware.uart.UART0)
+function hardware.uart.read_byte(uartx)
 end
 
 --- Configures the UART peripheral
